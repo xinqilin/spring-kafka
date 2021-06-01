@@ -1,4 +1,4 @@
-package com.bill.kafka.common;
+package com.bill.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Slf4j
 public class KafkaReceiver {
 
-    @KafkaListener(topics = {"bill"})
+    @KafkaListener(topics = {"bill_topic"})
     public void listen(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
@@ -19,5 +19,10 @@ public class KafkaReceiver {
             log.info("----------------- record =", record);
             log.info("------------------ message =", message);
         }
+    }
+
+    @KafkaListener(topics = "bill_topic", groupId = "bill_group_id")
+    public void getMessage(String message) {
+        System.out.println("getMessage: " + message);
     }
 }

@@ -1,4 +1,4 @@
-package com.bill.kafka.common;
+package com.bill.kafka;
 
 import com.bill.kafka.dto.Message;
 import com.google.gson.Gson;
@@ -15,18 +15,14 @@ import java.util.UUID;
 @Slf4j
 public class KafkaSender {
 
+    private static final String TOPIC = "bill_topic";
+
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    private Gson gson = new GsonBuilder().create();
-
     //傳送訊息方法
-    public void send() {
-        Message message = new Message();
-        message.setId(System.currentTimeMillis());
-        message.setMsg(UUID.randomUUID().toString());
-        message.setSendTime(new Date());
-        log.info("message = {}", gson.toJson(message));
-        kafkaTemplate.send("bill", gson.toJson(message));
+    public void send(String msg) {
+
+        this.kafkaTemplate.send(TOPIC, msg);
     }
 }
